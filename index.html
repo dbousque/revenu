@@ -1,0 +1,139 @@
+
+
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<style>
+			body {
+				background-color: #EEE;
+				font-family: Monaco, "Courier New", monospace;
+			}
+
+			.everything-container {
+				margin: 0 auto;
+				text-align: center;
+				margin-top: 100px;
+			}
+
+			#to-update {
+				padding: 25px;
+				padding-left: 40px;
+				padding-right: 40px;
+				font-size: 24px;
+				border: 1px solid #333;
+				max-width: 300px;
+				display: inline-block;
+				background-color: #FFF;
+				border-radius: 2px;
+				box-shadow: 0px 2px 4px #888;
+			}
+
+			.salary-button {
+				padding: 20px;
+				box-shadow: 0px 3px 3px 0px #555;
+				background-color: rgba(0, 128, 0, 0.74);
+				display: inline-block;
+				margin-top: 10px;
+				color: #FFF;
+				cursor: pointer;
+				border-radius: 2px;
+				-webkit-transition-duration: 0.3s;
+				transition-duration: 0.3s;
+			}
+
+			.salary-button:hover {
+				transform: translateY(-2px);
+				box-shadow: 0px 5px 8px 0px #555;
+			}
+
+			.buttons-container {
+				margin-top: 30px;
+			}
+
+			.title {
+				color: #333;
+				line-height: 14px;
+			}
+
+			.titles {
+				margin-bottom: 40px;
+			}
+
+			#seconds {
+				display: inline-block;
+				position: absolute;
+				bottom: 0;
+				margin-left: 25px;
+				display: none;
+			}
+
+			.updates-container {
+				position: relative;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			var currentIntervalEuros = null;
+			var currentIntervalSeconds = null;
+			function updateSalary(elt, seconds, dailyEuro, updateEvery) {
+				let startTime = new Date();
+				let dailyEuroCents = dailyEuro * 100.0;
+				if (currentIntervalEuros)
+					clearInterval(currentIntervalEuros);
+				currentIntervalEuros = setInterval(function() {
+					let elapsed = (new Date()) - startTime;
+					let sum = dailyEuroCents * elapsed / 1000.0 / 24.0 / 60.0 / 60.0;
+					sum = parseInt(sum);
+					let euros = parseInt(sum / 100);
+					let cents = parseInt(sum - (euros * 100.0));
+					if (cents < 10)
+						cents = "0" + cents;
+					elt.textContent = euros + "." + cents + " €";
+				}, updateEvery);
+				if (currentIntervalSeconds)
+					clearInterval(currentIntervalSeconds);
+				currentIntervalSeconds = setInterval(function() {
+					let time = (new Date()) - startTime;
+					time = parseInt(time / 1000);
+					seconds.textContent = time + " s";
+				}, updateEvery);
+			}
+
+			function startUpdate(dailyEuro) {
+				let elt = document.getElementById('to-update');
+				let seconds = document.getElementById('seconds');
+				updateSalary(elt, seconds, dailyEuro, 50);
+			}
+		</script>
+		<div class="everything-container">
+			<div class="titles">
+				<h2 class="title">
+					Combien gagnent-ils ?
+				</h2>
+				<h4 class="title">
+					en temps réel
+				</h4>
+			</div>
+			<div class="updates-container">
+				<div id="to-update">
+					0.00 €
+				</div>
+				<div id="seconds">
+					0 s
+				</div>
+			</div>
+			<div class="buttons-container">
+				<div class="salary-button" onclick="startUpdate(90.2)">
+					Professeur agrégé à 2746 €
+				</div>
+				<div class="salary-button" onclick="startUpdate(252.7)">
+					Chirurgien à 7687 €
+				</div>
+				<div class="salary-button" onclick="startUpdate(698630.1)">
+					Liliane Bettencourt (dividendes seules)
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
