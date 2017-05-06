@@ -64,8 +64,7 @@
 				display: inline-block;
 				position: absolute;
 				bottom: 0;
-				margin-left: 25px;
-				display: none;
+				margin-left: 15px;
 			}
 
 			.updates-container {
@@ -116,8 +115,22 @@
 					clearInterval(currentIntervalSeconds);
 				currentIntervalSeconds = setInterval(function() {
 					let time = (new Date()) - startTime;
+					let timeFloat = time / 1000;
 					time = parseInt(time / 1000);
-					seconds.textContent = time + " s";
+					if (timeFloat % 3 < 1.5) {
+						if (seconds.innerHTML.length < 10) {
+							seconds.innerHTML = `
+								<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
+									<circle cx="8" cy="8" r="8" style="fill: rgba(0, 128, 0, 0.74);"/>
+								</svg>
+							`;
+						}
+					}
+					else {
+						seconds.innerHTML = '';
+					}
+					/*let content = timeFloat % 3 < 1.5 ? "○" : "";
+					seconds.textContent = content;*/
 				}, updateEvery);
 			}
 
@@ -149,7 +162,6 @@
 					0.00 €
 				</div>
 				<div id="seconds">
-					0 s
 				</div>
 			</div>
 			<div class="buttons-container">
@@ -160,7 +172,7 @@
 					Chirurgien à 7687 €
 				</div>
 				<div class="salary-button" onclick="startUpdate(698630.1)">
-					Liliane Bettencourt (dividendes seules)
+					Liliane Bettencourt (dividendes seuls)
 				</div>
 			</div>
 		</div>
